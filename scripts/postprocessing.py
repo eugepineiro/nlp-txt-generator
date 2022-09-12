@@ -2,6 +2,7 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import re
 from os import listdir
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 def generate_word_cloud(text, ignore=False):
     if ignore:
@@ -22,8 +23,38 @@ def generate_word_cloud(text, ignore=False):
     plt.axis("off")
     plt.show()
 
+def count_vectorizer(train_data):
+    cv = CountVectorizer(
+        ngram_range=[1, 1], # just using unigrams
+        max_df=0.8, min_df=2,
+        max_features=None,
+        stop_words="english" # delete stopwords
+    )
+    matrix = cv.fit_transform(train_data)
+    vocabulary = cv.get_feature_names_out()
+    print(matrix)   # (número de documento, índice de la palabra en cv.get_feature_names_out()) cantidad de apariciones
+    print(f'Vocabulario: {vocabulary}')
+    print(f'Tamaño: {len(vocabulary)}')
+
+def tfidf(train_data):
+    # Tmb relaciona los docs ademas de darme la freq
+    tfidf = TfidfVectorizer(ngram_range=[1, 1], max_df=0.8, min_df=2, max_features=None, stop_words="english")
+    matrix = tfidf.fit_transform(train_data)
+    vocabulary = tfidf.get_feature_names_out()
+    print(matrix)  # (número de documento, índice de la palabra en cv.get_feature_names_out()) frecuencia de la palabra
+    print(f'Vocabulario: {vocabulary}')
+    print(f'Tamaño: {len(vocabulary)}')
+
 base_path = '../corpus/'
 filenames = listdir(base_path)
+data = []
+for filename in filenames:
+    f = open(base_path + filename)
+    data.append(f.read())
+#count_vectorizer(data)
+tfidf(data)
+
+exit()
 text = ''
 for filename in filenames:
     f = open(base_path + filename)
