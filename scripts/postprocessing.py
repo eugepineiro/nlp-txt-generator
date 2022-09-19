@@ -1,8 +1,9 @@
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-import re
+import re, string
 from os import listdir
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from gensim.models import Word2Vec
 
 def generate_word_cloud(text, ignore=False):
     if ignore:
@@ -46,3 +47,30 @@ def tfidf(train_data):
     print(f'Tamaño: {len(vocabulary)}')
 
     return vocabulary
+
+def word2vec(text):
+
+    lines = text.replace('\n', ' ')
+    lines = lines.split(' ')
+
+    # make all characters lower
+    lines = [line.lower() for line in lines]
+
+    # remove punctuations from each line
+    lines = [line.translate(str.maketrans('', '', string.punctuation)) for line in lines]
+
+    # tokenize
+    # lines = word_tokenize(lines)
+
+
+
+    model = Word2Vec(
+        sentences=[lines],
+        min_count=1,
+        sg=1,
+        window=7
+    )
+
+    print(model.wv.most_similar('hola'))
+
+word2vec('hola como estas esto es un gaucho')
