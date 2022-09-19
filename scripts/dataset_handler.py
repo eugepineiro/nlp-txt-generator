@@ -1,5 +1,6 @@
 from gutenberg.acquire import load_etext
 from gutenberg.cleanup import strip_headers
+from gutenberg.query import get_metadata, get_etexts
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -46,38 +47,35 @@ def get_popular_books(page):
     return ebook_numbers
 
 def save_txt(filename, text):
-    print("Saving File")
     with open(filename + '.txt', 'w') as f:
         f.write(text)
 
-ebook_numbers = get_popular_books("https://www.gutenberg.org/browse/scores/top")
-print(f"Getting {len(ebook_numbers)} ebooks")
-print(ebook_numbers)
-texts = []
-for ebook in ebook_numbers[30:]:
+def build_popular_books_corpus(text_start=0, text_end=-1):
+    ebook_numbers = get_popular_books("https://www.gutenberg.org/browse/scores/top")
+    print(f"Trying to get {len(ebook_numbers)} ebooks")
+    print(ebook_numbers)
 
-    try:
-        print(ebook)
-        text = strip_headers(load_etext(ebook)).strip()
-        save_txt(str(ebook), text[1000:4000])
-    except ValueError:
-        improved_ebook = get_improved_edition(ebook)
-        print(improved_ebook)
+    for ebook in ebook_numbers:
+
         try:
-            text = strip_headers(load_etext(improved_ebook)).strip()
-            save_txt(str(improved_ebook), text[1000:4000])
-            print("Improved edition")
+            text = strip_headers(load_etext(ebook)).strip()
+            if text_end == -1:
+                text = text[text_start:]
+            else:
+                text = text[text_start:text_end]
+            save_txt(str(ebook), text)
+            print(f"Ebook {ebook} successfully saved")
+
         except ValueError:
-            print("Ebook does not exists")
+            improved_ebook = get_improved_edition(ebook)
+            try:
+                text = strip_headers(load_etext(improved_ebook)).strip()
+                if text_end == -1:
+                    text = text[text_start:]
+                else:
+                    text = text[text_start:text_end]
+                save_txt(str(improved_ebook), text)
+                print(f"Improved ebook {improved_ebook} successfully saved")
 
-
-exit()
-texts = []
-for ebook in ebook_numbers:
-
-    text = strip_headers(load_etext(ebook)).strip()
-
-    print(len(text))
-    texts.append(text[1000:])
-
-print(texts)
+            except ValueError:
+                print(f"Ebook {improved_ebook} does not exist anymore")

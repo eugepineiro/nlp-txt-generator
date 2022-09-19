@@ -1,0 +1,8 @@
+{
+  "build_corpus": true,
+  "postprocessing": {
+    "word_cloud": false,
+    "count_vectorizer": false,
+    "tfidf": false
+  }
+}

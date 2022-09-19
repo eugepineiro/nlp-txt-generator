@@ -45,19 +45,4 @@ def tfidf(train_data):
     print(f'Vocabulario: {vocabulary}')
     print(f'Tamaño: {len(vocabulary)}')
 
-base_path = '../corpus/'
-filenames = listdir(base_path)
-data = []
-for filename in filenames:
-    f = open(base_path + filename)
-    data.append(f.read())
-#count_vectorizer(data)
-tfidf(data)
-
-exit()
-text = ''
-for filename in filenames:
-    f = open(base_path + filename)
-    text += f.read()
-generate_word_cloud(text)
-generate_word_cloud(text, ignore=True)
+    return vocabulary
