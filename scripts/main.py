@@ -11,28 +11,28 @@ config_word_cloud = config["postprocessing"]["word_cloud"]
 config_count_vectorizer = config["postprocessing"]["count_vectorizer"]
 config_tfidf = config["postprocessing"]["tfidf"]
 config_word2vec = config["postprocessing"]["word2vec"]
+base_path = config["corpus"]["path"]
 
-base_path = '../corpus/'
 if config_build_corpus:
     if config_corpus_name == 'popular':
         build_popular_books_corpus()
     else:
         build_specific_corpus(config_corpus_name)
-        base_path = f"../{config_corpus_name}_corpus/"
 
 filenames = listdir(base_path)
 data = []
 if config_word_cloud:
-
+    print(base_path)
     text = ''
     for filename in filenames:
         f = open(base_path + filename)
         text += f.read()
+
     generate_word_cloud(text)
     generate_word_cloud(text, ignore=True)
 
 if config_count_vectorizer or config_tfidf:
-    base_path = '../corpus/'
+
     filenames = listdir(base_path)
     data = []
     for filename in filenames:

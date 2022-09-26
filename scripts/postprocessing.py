@@ -8,15 +8,18 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
 def generate_word_cloud(text, ignore=False):
+
     if ignore:
+        print(text)
         print("ignoring words")
 
         text = text.lower()
 
-        shortword = re.compile(r'\W*\b\w{1,3}\b') # Ignore short words
+        shortword = re.compile(r'\W*\b\w{1,6}\b') # Ignore short words
         text = shortword.sub('', text)
 
-        generic_vocabulary = ['chapter', 'will', 'made','come','great','good','much', 'upon', 'thee', 'thou']
+        generic_vocabulary =['chapter', 'illustration','language','preface',"\'s", 'vatsyayana','one','without','another','anything','admiral','kennedy','something', 'concerning', 'thought', 'tabaqui','edition', 'contain', 'nothing']
+        ignore_arr = generic_vocabulary + stopwords.words('english')
         for word in generic_vocabulary:
             text = text.replace(word, '')
 
@@ -45,6 +48,12 @@ def tfidf(train_data):
     matrix = tfidf.fit_transform(train_data)
     vocabulary = tfidf.get_feature_names_out()
     print(matrix)  # (número de documento, índice de la palabra en cv.get_feature_names_out()) frecuencia de la palabra
+
+    most_frequent_words = matrix.argmax(axis=1)
+    for i in range(len(most_frequent_words)):
+        index = most_frequent_words[i][0]
+        print(f"Word: {vocabulary[index]} Freq: {matrix[(0,index)]}")
+
     print(f'Vocabulario: {vocabulary}')
     print(f'Tamaño: {len(vocabulary)}')
 
