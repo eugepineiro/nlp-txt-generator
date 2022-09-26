@@ -1,8 +1,9 @@
 {
-  "build_corpus": true,
+  "build_corpus": false,
   "postprocessing": {
     "word_cloud": false,
     "count_vectorizer": false,
-    "tfidf": false
+    "tfidf": false,
+    "word2vec": true
   }
 }

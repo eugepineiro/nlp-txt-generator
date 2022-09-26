@@ -48,21 +48,16 @@ def tfidf(train_data):
 
     return vocabulary
 
-def word2vec(text):
+def word2vec(text, key):
 
     lines = text.replace('\n', ' ')
     lines = lines.split(' ')
-
-    # make all characters lower
     lines = [line.lower() for line in lines]
 
-    # remove punctuations from each line
-    lines = [line.translate(str.maketrans('', '', string.punctuation)) for line in lines]
+    lines = [line.translate(str.maketrans('', '', string.punctuation)) for line in lines]  # remove punctuations from each line
 
     # tokenize
-    # lines = word_tokenize(lines)
-
-
+    #lines = word_tokenize(lines)
 
     model = Word2Vec(
         sentences=[lines],
@@ -70,7 +65,4 @@ def word2vec(text):
         sg=1,
         window=7
     )
-
-    print(model.wv.most_similar('hola'))
-
-word2vec('hola como estas esto es un gaucho')
+    print(model.wv.most_similar(key))
