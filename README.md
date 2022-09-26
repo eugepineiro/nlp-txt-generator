@@ -15,22 +15,22 @@ $> git clone git@github.com:eugepineiro/nlp-txt-generator.git
 ```
 2. Install required modules from requirements.txt:
 ```bash
-$> pip3 install -r requirements.txt
+$> pip3 install -r scripts/requirements.txt
 ```
 ### Configuration & Execution
 Customize `config.json`:
 
-| Parámetro          | Descripción                                             | Opciones |
-|--------------------|---------------------------------------------------------|----------|
-| "corpus"           | Configuration params to build corpus                    |          |
-| "build"            | Generate corpus                                         | boolean  |
-| "name"             | Corpus name. "popular" or specific topic. Ex: "vampire" | string   |
-| "path"             | Path where corpus has been saved                        | string   |
-| "postprocessing"   | Configuration params to build corpus                    |  |
-| "word_cloud"       | Plot wordcloud                                          | boolean  |
-| "count_vectorizer" | Run Count Vectorizer algorithm                          | boolean  |
-| "tfidf"            | Run TFIDF algorithm                                     | boolean  |
-| "word2vec"         | Run Word2Vec algorithm                                  | boolean  |
+| Parameter          | Description                                             | Options |
+|--------------------|---------------------------------------------------------|---------|
+| "corpus"           | Configuration params to build corpus                    |         |
+| "build"            | Generate corpus                                         | boolean |
+| "name"             | Corpus name. "popular" or specific topic. Ex: "vampire" | string  |
+| "path"             | Path where corpus has been saved                        | string  |
+| "postprocessing"   | Configuration params to build corpus                    |         |
+| "word_cloud"       | Plot wordcloud                                          | boolean |
+| "count_vectorizer" | Run Count Vectorizer algorithm                          | boolean |
+| "tfidf"            | Run TFIDF algorithm                                     | boolean |
+| "word2vec"         | Run Word2Vec algorithm                                  | boolean |
 
 Exec program with:
 ```bash
