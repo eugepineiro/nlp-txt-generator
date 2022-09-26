@@ -40,7 +40,7 @@ if config_count_vectorizer or config_tfidf:
 
 if config_word2vec:
     f = open("../corpus/105.txt", "r")
-    word2vec(text=f.read(), key='history')
+    word2vec(text=f.read(), key='lady')
 
 
 

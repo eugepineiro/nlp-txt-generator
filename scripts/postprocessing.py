@@ -1,9 +1,11 @@
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-import re, string
+import re, string, nltk
 from os import listdir
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from gensim.models import Word2Vec
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 
 def generate_word_cloud(text, ignore=False):
     if ignore:
@@ -48,19 +50,19 @@ def tfidf(train_data):
 
     return vocabulary
 
-def word2vec(text, key):
+def word2vec(text, key, clean=True):
 
-    lines = text.replace('\n', ' ')
-    lines = lines.split(' ')
-    lines = [line.lower() for line in lines]
+    tokens = word_tokenize(text)
 
-    lines = [line.translate(str.maketrans('', '', string.punctuation)) for line in lines]  # remove punctuations from each line
+    tokens = [token.lower() for token in tokens] # to lowercase
 
-    # tokenize
-    #lines = word_tokenize(lines)
+    if clean: # remove punctuations and stopwords
+        for token in tokens:
+            if token in string.punctuation or token in stopwords.words('english'):
+                tokens.remove(token)
 
     model = Word2Vec(
-        sentences=[lines],
+        sentences=[tokens],
         min_count=1,
         sg=1,
         window=7
