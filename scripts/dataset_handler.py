@@ -79,3 +79,24 @@ def build_popular_books_corpus(text_start=0, text_end=-1):
 
             except ValueError:
                 print(f"Ebook {improved_ebook} does not exist anymore")
+
+
+def build_specific_corpus(query, text_start=0, text_end=-1):
+
+    page = f"https://www.gutenberg.org/ebooks/search/?query={query}&submit_search=Go%21" #&start_index=26
+    ebook_numbers = get_popular_books(page)
+
+
+    for ebook in ebook_numbers:
+
+        try:
+            text = strip_headers(load_etext(ebook)).strip()
+            if text_end == -1:
+                text = text[text_start:]
+            else:
+                text = text[text_start:text_end]
+            save_txt(str(ebook), text)
+            print(f"Ebook {ebook} successfully saved")
+
+        except ValueError:
+            print(f"Error obtaining ebook {ebook}")

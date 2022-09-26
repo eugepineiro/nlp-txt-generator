@@ -1,8 +1,11 @@
 {
-  "build_corpus": false,
+  "corpus": {
+    "build": true,
+    "name": "vampire"
+  },
   "postprocessing": {
     "word_cloud": false,
-    "count_vectorizer": false,
+    "count_vectorizer": true,
     "tfidf": false,
     "word2vec": true
   }
