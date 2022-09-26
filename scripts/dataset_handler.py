@@ -1,17 +1,28 @@
 from gutenberg.acquire import load_etext
 from gutenberg.cleanup import strip_headers
-from gutenberg.query import get_metadata, get_etexts
 from bs4 import BeautifulSoup
 import requests
 import re
 
 
 def get_html(page):
+    """
+    Requests HTML for web scrapping the page
+
+    :param page: url for web scappr
+    :return: Soup HTML parser
+    """
     r = requests.get(page.replace("\n", ""))
     soup = BeautifulSoup(r.content, 'html.parser')
     return soup
 
 def get_improved_edition(ebook_number):
+    """
+    When ebook is deprecated must get improved edition
+
+    :param ebook_number: deprecated ebook number
+    :return: new ebook number
+    """
 
     page = 'https://www.gutenberg.org/ebooks/' + str(ebook_number)
     r = requests.get(page.replace("\n", ""))
@@ -27,9 +38,12 @@ def get_improved_edition(ebook_number):
             ebook_number = int(link_str[(len(url)):])
             return ebook_number
 
-
-
 def get_popular_books(page):
+    """
+    Web scrapping for popular books from Gutenberg page
+    :param page: url for web scrapping
+    :return: ebook numbers
+    """
 
     soup = get_html(page)  # Download HTML
 
@@ -47,10 +61,24 @@ def get_popular_books(page):
     return ebook_numbers
 
 def save_txt(filename, text):
+    """
+    Saves text to file.txt
+
+    :param filename: save to filename.txt
+    :param text: text to save
+    :return: void
+    """
     with open(filename + '.txt', 'w') as f:
         f.write(text)
 
 def build_popular_books_corpus(text_start=0, text_end=-1):
+    """
+    Generates top Gutenberg books corpus with web scrapping
+
+    :param text_start: Save text from text_start
+    :param text_end: Save text until text_end. If text_end = -1 saves whole book from text_start
+    :return: void, saves to file.txt
+    """
     ebook_numbers = get_popular_books("https://www.gutenberg.org/browse/scores/top")
     print(f"Trying to get {len(ebook_numbers)} ebooks")
     print(ebook_numbers)
@@ -82,10 +110,16 @@ def build_popular_books_corpus(text_start=0, text_end=-1):
 
 
 def build_specific_corpus(query, text_start=0, text_end=-1):
+    """
+    Generates Gutenberg books corpus about a specific topic
 
+    :param query: specific topic. ex: vampire
+    :param text_start: Save text from text_start
+    :param text_end: Save text until text_end . If text_end = -1 saves whole book from text_start
+    :return:
+    """
     page = f"https://www.gutenberg.org/ebooks/search/?query={query}&submit_search=Go%21" #&start_index=26
     ebook_numbers = get_popular_books(page)
-
 
     for ebook in ebook_numbers:
 

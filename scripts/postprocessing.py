@@ -8,19 +8,25 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
 def generate_word_cloud(text, ignore=False):
+    """
+    Plots word cloud
 
+    :param text: string from where the wordcloud is generated
+    :param ignore: remove shortwords, genirc words and stopwords
+    :return: void
+    """
     if ignore:
         print(text)
         print("ignoring words")
 
         text = text.lower()
 
-        shortword = re.compile(r'\W*\b\w{1,6}\b') # Ignore short words
+        shortword = re.compile(r'\W*\b\w{1,3}\b') # Ignore short words
         text = shortword.sub('', text)
 
         generic_vocabulary =['chapter', 'illustration','language','preface',"\'s", 'vatsyayana','one','without','another','anything','admiral','kennedy','something', 'concerning', 'thought', 'tabaqui','edition', 'contain', 'nothing']
-        ignore_arr = generic_vocabulary + stopwords.words('english')
-        for word in generic_vocabulary:
+        ignore_arr = generic_vocabulary #+ stopwords.words('english')
+        for word in ignore_arr:
             text = text.replace(word, '')
 
     wordcloud = WordCloud().generate(text)
@@ -30,6 +36,12 @@ def generate_word_cloud(text, ignore=False):
     plt.show()
 
 def count_vectorizer(train_data):
+    """
+    Count vectorizer
+
+    :param train_data: words to train
+    :return: void, prints vocabulary and sparse matrix
+    """
     cv = CountVectorizer(
         ngram_range=[1, 1], # just using unigrams
         max_df=0.8, min_df=2,
@@ -43,7 +55,13 @@ def count_vectorizer(train_data):
     print(f'Tamaño: {len(vocabulary)}')
 
 def tfidf(train_data):
-    # Tmb relaciona los docs ademas de darme la freq
+    """
+    TFIDF. Prints sparse matrix
+
+    :param train_data: words to train
+    :return: vocabulury
+    """
+
     tfidf = TfidfVectorizer(ngram_range=[1, 1], max_df=0.8, min_df=2, max_features=None, stop_words="english")
     matrix = tfidf.fit_transform(train_data)
     vocabulary = tfidf.get_feature_names_out()
@@ -60,12 +78,20 @@ def tfidf(train_data):
     return vocabulary
 
 def word2vec(text, key, clean=True):
+    """
+    Word2Vec embeddings
+
+    :param text: text to generate embeddings
+    :param key: most similar to key
+    :param clean: remove punctuations and stopwords
+    :return: tokens
+    """
 
     tokens = word_tokenize(text)
 
     tokens = [token.lower() for token in tokens] # to lowercase
 
-    if clean: # remove punctuations and stopwords
+    if clean:
         for token in tokens:
             if token in string.punctuation or token in stopwords.words('english'):
                 tokens.remove(token)
@@ -77,3 +103,5 @@ def word2vec(text, key, clean=True):
         window=7
     )
     print(model.wv.most_similar(key))
+
+    return tokens
