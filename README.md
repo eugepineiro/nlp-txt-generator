@@ -1,14 +1,14 @@
 # BARD - NLP Story Generator
 
 BARD is a Story Generator using Transformers (Work in Progress). 
-It obtains books from Gutenberg API, like popular books or specific corpus. (Ex. Vampire books)
+It obtains certain books from Gutenberg API, such as popular books or specific corpus. (Ex. Vampire books)
 
 ## How to use
 
 ### Requirements
 - Python 3.8
 
-### Instalación
+### Installation
 1. Clone repository with SSH:
 ```bash
 $> git clone git@github.com:eugepineiro/nlp-txt-generator.git
