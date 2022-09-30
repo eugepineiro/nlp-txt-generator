@@ -1,6 +1,7 @@
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import re, string, nltk
+import pandas as pd
 from os import listdir
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from gensim.models import Word2Vec
@@ -40,7 +41,7 @@ def count_vectorizer(train_data):
     Count vectorizer
 
     :param train_data: words to train
-    :return: void, prints vocabulary and sparse matrix
+    :return: vocabulary
     """
     cv = CountVectorizer(
         ngram_range=[1, 1], # just using unigrams
@@ -51,29 +52,48 @@ def count_vectorizer(train_data):
     matrix = cv.fit_transform(train_data)
     vocabulary = cv.get_feature_names_out()
     print(matrix)   # (número de documento, índice de la palabra en cv.get_feature_names_out()) cantidad de apariciones
-    print(f'Vocabulario: {vocabulary}')
-    print(f'Tamaño: {len(vocabulary)}')
+    print(f'Vocabulary: {vocabulary}')
+    print(f'Size: {len(vocabulary)}')
+
+    return vocabulary
 
 def tfidf(train_data):
     """
-    TFIDF. Prints sparse matrix
+    TFIDF. Prints vocabulary matrix
 
-    :param train_data: words to train
-    :return: vocabulury
+    :param train_data: string array (documents) to train
+    :return: vocabulary
     """
 
-    tfidf = TfidfVectorizer(ngram_range=[1, 1], max_df=0.8, min_df=2, max_features=None, stop_words="english")
+    tfidf = TfidfVectorizer(
+        ngram_range=[1, 1],                   # Just using unigrams (words)
+        max_df=0.8,                           # When building the vocabulary ignore terms that have a document frequency strictly higher than the given threshold
+        min_df=0.1,                           # When building the vocabulary ignore terms that have a document frequency strictly lower than the given threshold
+        max_features=None,                    # Consider all features
+        analyzer='word',                      # To remove stopwords
+        stop_words=stopwords.words('english') # List that contains stop words, all of which will be removed from the resulting tokens. Only applies if analyzer == 'word'. There are several known issues when ‘english’ string is used so this is the alternative
+    )
     matrix = tfidf.fit_transform(train_data)
     vocabulary = tfidf.get_feature_names_out()
-    print(matrix)  # (número de documento, índice de la palabra en cv.get_feature_names_out()) frecuencia de la palabra
+    print(f"TFIDF Matrix (number of document, word index) frequency \n{matrix}")
 
+    df = pd.DataFrame(matrix[0].T.todense(), index=tfidf.get_feature_names_out(), columns=["TF-IDF"])
+    df = df.sort_values('TF-IDF', ascending=False)
+
+    top_n_words = 25
+    print(f"\nTop {top_n_words} frequent words\n {df.head(25)}")
+
+    """
+    Another way to see most_frequent_words
     most_frequent_words = matrix.argmax(axis=1)
-    for i in range(len(most_frequent_words)):
-        index = most_frequent_words[i][0]
-        print(f"Word: {vocabulary[index]} Freq: {matrix[(0,index)]}")
+    print(most_frequent_words[0][0])
 
-    print(f'Vocabulario: {vocabulary}')
-    print(f'Tamaño: {len(vocabulary)}')
+    for i in range(len(most_frequent_words)):
+        index = most_frequent_words[i].min()
+        print(f"Word: {vocabulary[index]} Freq: {matrix[(0,index)]}")
+    """
+    print(f'\nWhole vocabulary: {vocabulary}')
+    print(f'\nVocabulary size: {len(vocabulary)}')
 
     return vocabulary
 

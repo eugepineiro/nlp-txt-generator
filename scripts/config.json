@@ -1,13 +1,13 @@
 {
   "corpus": {
     "build": false,
-    "name": "vampire",
-    "path": "../vampire_corpus/"
+    "name": "popular",
+    "path": "../corpus/"
   },
   "postprocessing": {
-    "word_cloud": true,
+    "word_cloud": false,
     "count_vectorizer": false,
-    "tfidf": false,
+    "tfidf": true,
     "word2vec": false
   }
 }

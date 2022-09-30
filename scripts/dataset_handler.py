@@ -7,9 +7,9 @@ import re
 
 def get_html(page):
     """
-    Requests HTML for web scrapping the page
+    Requests HTML for web scraping the page
 
-    :param page: url for web scappr
+    :param page: url for web scraper
     :return: Soup HTML parser
     """
     r = requests.get(page.replace("\n", ""))
@@ -40,7 +40,7 @@ def get_improved_edition(ebook_number):
 
 def get_popular_books(page):
     """
-    Web scrapping for popular books from Gutenberg page
+    Web scraping for popular books from Gutenberg page
     :param page: url for web scrapping
     :return: ebook numbers
     """
@@ -73,7 +73,7 @@ def save_txt(filename, text):
 
 def build_popular_books_corpus(text_start=0, text_end=-1):
     """
-    Generates top Gutenberg books corpus with web scrapping
+    Generates top Gutenberg books corpus with web scraping
 
     :param text_start: Save text from text_start
     :param text_end: Save text until text_end. If text_end = -1 saves whole book from text_start
@@ -111,7 +111,7 @@ def build_popular_books_corpus(text_start=0, text_end=-1):
 
 def build_specific_corpus(query, text_start=0, text_end=-1):
     """
-    Generates Gutenberg books corpus about a specific topic
+    Generates Gutenberg books corpus about specific topic
 
     :param query: specific topic. ex: vampire
     :param text_start: Save text from text_start
