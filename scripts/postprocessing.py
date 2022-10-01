@@ -17,15 +17,15 @@ def generate_word_cloud(text, ignore=False):
     :return: void
     """
     if ignore:
-        print(text)
-        print("ignoring words")
+
+        print("Ignoring words")
 
         text = text.lower()
 
         shortword = re.compile(r'\W*\b\w{1,3}\b') # Ignore short words
         text = shortword.sub('', text)
 
-        generic_vocabulary =['chapter', 'illustration','language','preface',"\'s", 'vatsyayana','one','without','another','anything','admiral','kennedy','something', 'concerning', 'thought', 'tabaqui','edition', 'contain', 'nothing']
+        generic_vocabulary =['chapter', 'illustration','language','preface','one','without','another','anything','something','edition', 'contain', 'nothing']
         ignore_arr = generic_vocabulary #+ stopwords.words('english')
         for word in ignore_arr:
             text = text.replace(word, '')
@@ -44,10 +44,11 @@ def count_vectorizer(train_data):
     :return: vocabulary
     """
     cv = CountVectorizer(
-        ngram_range=[1, 1], # just using unigrams
-        max_df=0.8, min_df=2,
+        ngram_range=[1, 1],     # just using unigrams
+        max_df=0.8,
+        min_df=2,
         max_features=None,
-        stop_words="english" # delete stopwords
+        stop_words="english"    # delete stopwords
     )
     matrix = cv.fit_transform(train_data)
     vocabulary = cv.get_feature_names_out()
@@ -122,6 +123,7 @@ def word2vec(text, key, clean=True):
         sg=1,
         window=7
     )
+    print(f"Similar words to {key}\n")
     print(model.wv.most_similar(key))
 
     return tokens

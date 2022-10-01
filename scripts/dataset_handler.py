@@ -79,9 +79,12 @@ def build_popular_books_corpus(text_start=0, text_end=-1):
     :param text_end: Save text until text_end. If text_end = -1 saves whole book from text_start
     :return: void, saves to file.txt
     """
-    ebook_numbers = get_popular_books("https://www.gutenberg.org/browse/scores/top")
-    print(f"Trying to get {len(ebook_numbers)} ebooks")
-    print(ebook_numbers)
+
+    print("Building POPULAR corpus")
+    url = "https://www.gutenberg.org/browse/scores/top"
+    ebook_numbers = get_popular_books(url)
+    print(f"Scraping from: {url}")
+    print(f"Trying to get {len(ebook_numbers)} ebooks\nEbook Numbers:\n{ebook_numbers}")
 
     for ebook in ebook_numbers:
 
@@ -103,23 +106,32 @@ def build_popular_books_corpus(text_start=0, text_end=-1):
                 else:
                     text = text[text_start:text_end]
                 save_txt(str(improved_ebook), text)
-                print(f"Improved ebook {improved_ebook} successfully saved")
+                if improved_ebook is not None:
+                    print(f"Improved ebook {improved_ebook} successfully saved")
 
             except ValueError:
-                print(f"Ebook {improved_ebook} does not exist anymore")
+                print(f"Ebook {ebook} is not supported anymore")
 
 
-def build_specific_corpus(query, text_start=0, text_end=-1):
+def build_specific_corpus(query, paging=-1, text_start=0, text_end=-1):
+    print(f"Building {query} corpus")
     """
     Generates Gutenberg books corpus about specific topic
 
     :param query: specific topic. ex: vampire
+    :param paging: get paginated ebooks from page: paging. If paging = -1 gets first page
     :param text_start: Save text from text_start
     :param text_end: Save text until text_end . If text_end = -1 saves whole book from text_start
     :return:
     """
-    page = f"https://www.gutenberg.org/ebooks/search/?query={query}&submit_search=Go%21" #&start_index=26
-    ebook_numbers = get_popular_books(page)
+    BOOKS_PER_PAGE = 25
+
+    url = f"https://www.gutenberg.org/ebooks/search/?query={query}&submit_search=Go%21"
+    if paging != -1:
+        url += f"&start_index={BOOKS_PER_PAGE*paging+1}"
+    print(f"Scraping from: {url}")
+
+    ebook_numbers = get_popular_books(url)
 
     for ebook in ebook_numbers:
 
@@ -133,4 +145,4 @@ def build_specific_corpus(query, text_start=0, text_end=-1):
             print(f"Ebook {ebook} successfully saved")
 
         except ValueError:
-            print(f"Error obtaining ebook {ebook}")
+            print(f"Ebook {ebook} is not supported anymore")
